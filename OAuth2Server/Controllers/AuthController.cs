@@ -72,7 +72,7 @@ namespace OAuth2Server.Controllers
                 User.FindFirst(OpenIddictConstants.Claims.Subject)?.Value);
 
             identity.AddClaim(OpenIddictConstants.Claims.Name,
-                User.Identity.Name);
+                User.FindFirst(OpenIddictConstants.Claims.Name)?.Value);
 
             var principal = new ClaimsPrincipal(identity);
 
