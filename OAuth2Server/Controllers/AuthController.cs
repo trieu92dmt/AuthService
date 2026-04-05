@@ -63,7 +63,7 @@ namespace OAuth2Server.Controllers
                     });
             }
 
-            // 👉 đã login → cấp token
+            // 👉 lấy identity từ cookie (login đã set)
             var identity = new ClaimsIdentity(
                 OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
@@ -98,9 +98,8 @@ namespace OAuth2Server.Controllers
 
             // 👉 login bằng cookie
             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
+                IdentityConstants.ApplicationScheme,
                 principal);
-
 
             return Ok();
         }

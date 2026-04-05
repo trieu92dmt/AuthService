@@ -65,28 +65,25 @@ builder.Services.AddOpenIddict()
 builder.Services
     .AddAuthentication(options =>
     {
-        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme; // "Cookies"
-    })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-    {
-        options.Events.OnRedirectToLogin = context =>
-        {
-            Console.WriteLine("🔥 HIT LOGIN REDIRECT");
-
-            var returnUrl = context.Request.Path + context.Request.QueryString;
-
-            context.Response.Redirect(
-                $"http://localhost:3000/login?returnUrl={Uri.EscapeDataString(returnUrl)}"
-            );
-
-            return Task.CompletedTask;
-        };
+        options.DefaultScheme = IdentityConstants.ApplicationScheme;
+        options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
     });
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    //options.Cookie.SameSite = SameSiteMode.None;   // 🔥
-    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // 🔥
+    options.Events.OnRedirectToLogin = context =>
+    {
+        Console.WriteLine("🔥 HIT LOGIN REDIRECT");
+
+        var returnUrl = context.Request.Path + context.Request.QueryString;
+
+        context.Response.Redirect(
+            $"http://localhost:3000/login?returnUrl={Uri.EscapeDataString(returnUrl)}"
+        );
+
+        return Task.CompletedTask;
+    };
+
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.SecurePolicy = CookieSecurePolicy.None;
 });
